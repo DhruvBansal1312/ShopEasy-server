@@ -146,7 +146,15 @@ export const updateProduct = TryCatch(async (req, res, next) => {
 
     await deleteFromCloudinary(ids);
 
-    product.photos = photosURL;
+   // product.photos = photosURL;
+
+    // Clear the old photos correctly
+  product.photos.splice(0, product.photos.length);
+
+  // Push each photo properly as a Mongoose subdoc
+  for (const photo of photosURL) {
+    product.photos.push(photo); // ✅ Mongoose will wrap it correctly
+  }
   }
 
   if (name) product.name = name;
